@@ -7,7 +7,7 @@ let userChoice
 // message with game result
 let gameResult
 let message
-
+// score keeping
 let wins = 0
 let losses = 0
 
@@ -28,8 +28,27 @@ function computerPlay() {
 
 function userPlay () {
     // prompt user for rock, paper, scissors input
-    userChoice = prompt("Rock, paper, scissors?", "")
-    console.log(userChoice);
+    userInput = prompt("Rock, paper, scissors?", "")
+    console.log("User input: " + userInput);
+
+    // adjust case so first letter is capitalized
+    let firstLetter = userInput[0];
+    let stringRemainder = userInput.slice(1);
+    userChoice = firstLetter.toUpperCase() + stringRemainder.toLowerCase();
+    console.log("Capitalized: " + userChoice);
+
+    // check if user input is a valid option
+    switch (userChoice) {
+        case "Rock":
+            break;
+        case "Paper":
+            break;
+        case "Scissors":
+            break;
+        default:
+            alert(`${ userChoice } is not a valid option! Try again.`);
+            userPlay();
+    }
 
     // assign rock, paper, scissors to 1, 2, 3
     if (userChoice == "Rock") {
@@ -39,7 +58,8 @@ function userPlay () {
     } else if (userChoice == "Scissors") {
         playerSelection = 3;
     }
-    console.log(playerSelection);
+    
+    console.log("Numerical equivalent: " + playerSelection);
 }
 
 // determine the game outcome for the user
@@ -89,5 +109,4 @@ function game() {
     console.log(`SCORE -- You: ${ wins }  Computer: ${ losses }`)
 }
 
-game();
 game();
