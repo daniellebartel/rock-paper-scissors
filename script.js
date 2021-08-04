@@ -6,14 +6,14 @@ let compChoice
 let userChoice
 // message with game result
 let gameResult
-let message
+let winnerIsMessage
 // score keeping
+let gameRound = 1
 let wins = 0
 let losses = 0
 
 function computerPlay() {
     computerSelection = Math.floor(Math.random()*3) + 1;  // randomly choose a number from 1 to 3
-    console.log(computerSelection);
 
     // assign 1, 2, 3 to rock, paper, scissors
     if (computerSelection == 1) {
@@ -23,21 +23,19 @@ function computerPlay() {
     } else {
         compChoice = "Scissors";
     }
-    console.log(compChoice);
+    console.log("Computer played " + compChoice);
 }
 
 function userPlay () {
     // prompt user for rock, paper, scissors input
-    userInput = prompt("Rock, paper, scissors?", "")
-    console.log("User input: " + userInput);
+    userInput = prompt("Round " + gameRound + " of 5\nRock, paper, scissors?", "")
 
     // adjust case so first letter is capitalized
     let firstLetter = userInput[0];
     let stringRemainder = userInput.slice(1);
     userChoice = firstLetter.toUpperCase() + stringRemainder.toLowerCase();
-    console.log("Capitalized: " + userChoice);
 
-    // check if user input is a valid option
+    // check if user input a valid option
     switch (userChoice) {
         case "Rock":
             break;
@@ -48,7 +46,10 @@ function userPlay () {
         default:
             alert(`${ userChoice } is not a valid option! Try again.`);
             userPlay();
+            return;
     }
+
+    console.log("You played " + userChoice);
 
     // assign rock, paper, scissors to 1, 2, 3
     if (userChoice == "Rock") {
@@ -58,8 +59,6 @@ function userPlay () {
     } else if (userChoice == "Scissors") {
         playerSelection = 3;
     }
-    
-    console.log("Numerical equivalent: " + playerSelection);
 }
 
 // determine the game outcome for the user
@@ -79,15 +78,15 @@ function playRound(playerSelection, computerSelection) {
 }
 
 // display a win/lose/tie message
-function gameMessage(gameResult) {
+function whoWon(gameResult) {
     if (gameResult == "win") {
-        message = `You win! ${ userChoice } beats ${ compChoice }.`
+        winnerIsMessage = `You win! ${ userChoice } beats ${ compChoice }.`
     } else if (gameResult == "lose") {
-        message = `You lose! ${ compChoice } beats ${ userChoice }.`
+        winnerIsMessage = `You lose! ${ compChoice } beats ${ userChoice }.`
     } else if (gameResult == "tie") {
-        message = `It's a tie! You both chose ${ userChoice }.`
+        winnerIsMessage = `It's a tie! You both chose ${ userChoice }.`
     }
-    return message;
+    return winnerIsMessage;
 }
 
 // determine the score
@@ -97,16 +96,37 @@ function scoreKeep(gameResult) {
     } else if (gameResult == "lose") {
         ++losses
     }
+    ++gameRound;
 }
 
 function game() {
-    computerPlay();
     userPlay();
+    computerPlay();
     playRound(playerSelection, computerSelection);
-    gameMessage(gameResult);
-    console.log(message);
+    whoWon(gameResult);
+    console.log(winnerIsMessage);
     scoreKeep(gameResult);
     console.log(`SCORE -- You: ${ wins }  Computer: ${ losses }`)
 }
 
-game();
+// determine who won out of 5 rounds
+function findChampion() {
+    if (wins > losses) {
+        console.log(`Congratulations! You won ${ wins }, lost ${ losses }, and tied ${ 5 - wins - losses} games.`)
+    }
+    else if (wins < losses) {
+        console.log(`Too bad. You lost ${ losses }, won ${ wins }, and tied ${ 5 - wins - losses} games.`)
+    }
+    else if (wins == losses) {
+        console.log(`Draw! You both won ${ wins }, lost ${ losses }, and tied ${ 5 - wins - losses} games.`)
+    }
+}
+
+alert("Ready to play?")
+
+// play 5 rounds
+while (gameRound <= 5) {
+    game();
+}
+
+findChampion();
